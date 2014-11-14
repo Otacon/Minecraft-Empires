@@ -1,6 +1,5 @@
 import random
 from unittest import TestCase
-
 from Common import Position
 
 
