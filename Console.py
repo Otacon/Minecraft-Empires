@@ -1,10 +1,13 @@
 from distutils.spawn import find_executable
 import json
+import os
 import socket
 import struct
 import re
 from abc import ABCMeta, abstractmethod
-
+import subprocess
+import threading
+from threading import Thread,Condition
 from Common import Player
 
 
@@ -312,6 +315,82 @@ class RCon(MinecraftShell):
         if self._debug:
             print("Disconnected.")
         self._sock.close()
+
+
+class ShellWrapper (Thread):
+
+    def __init__(self, server_maker, condition):
+        """
+        :type server_maker: ServerMaker
+        :type condition: Condition
+        :return:
+        """
+        self._server_maker = server_maker
+        self._process = None
+        self._message_queue = []
+        self._condition = condition
+
+    def run(self):
+        self.config_server()
+        os.chdir(self._server_maker.server_path)
+        self._process = subprocess.Popen(["java", "-Xmx1024M", "-Xms1024M", "-jar", "minecraft_server.jar"], stdout=subprocess.PIPE)
+        self.__read_std_out()
+
+    @property
+    def message_queue(self):
+        return self._message_queue
+
+    def __read_std_out(self):
+        while True:
+            line = self._process.stdout.readline()
+            if line != '':
+                self._condition.acquire()
+                self._message_queue.append(line)
+                self._condition.notify()
+                self._condition.release()
+
+    def config_server(self):
+        self._server_maker.config()
+        self._server_maker.setup_folder()
+
+
+class ShellManager(object):
+
+    def __init__(self):
+        self._output_listeners = []
+        self._wrappers = []
+        self._condition = Condition()
+
+    def run_server(self, server_maker):
+        wrapper = ShellWrapper(server_maker, self._condition)
+        self._wrappers.append(wrapper)
+        wrapper.start()
+
+    def wait_for_new_message(self):
+        while True:
+            self._condition.wait()
+
+
+    def connect_rcon(self):
+        pass
+
+    def send_command(self):
+        pass
+
+    def fire_output_event(self, string):
+        for listener in self._output_listeners:
+            listener.on_output(string)
+
+    def add_output_listener(self, listener):
+        self._output_listeners.append(listener)
+        pass
+
+    class OutputListener(object):
+        __metaclass__ = ABCMeta
+
+        @abstractmethod
+        def on_output(self, string):
+            pass
 
 
 def test_rcon():

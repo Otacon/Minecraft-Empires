@@ -11,13 +11,13 @@ class TestInitPosition(TestCase):
         self._position = Position()
 
     def test_x(self):
-        self.assertEquals(self._position.x, 0)
+        self.assertEqual(self._position.x, 0)
 
     def test_y(self):
-        self.assertEquals(self._position.y, 0)
+        self.assertEqual(self._position.y, 0)
 
     def test_z(self):
-        self.assertEquals(self._position.z, 0)
+        self.assertEqual(self._position.z, 0)
 
 
 class TestRandomPosition(TestCase):
@@ -28,10 +28,10 @@ class TestRandomPosition(TestCase):
         self._position = Position(self._x, self._y, self._z)
 
     def test_x(self):
-        self.assertEquals(self._position.x, self._x)
+        self.assertEqual(self._position.x, self._x)
 
     def test_y(self):
-        self.assertEquals(self._position.y, self._y)
+        self.assertEqual(self._position.y, self._y)
 
     def test_z(self):
-        self.assertEquals(self._position.z, self._z)
+        self.assertEqual(self._position.z, self._z)

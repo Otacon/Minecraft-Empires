@@ -189,6 +189,28 @@ class ServerMaker(object):
             self.__start_download(download, self._file_system.bins)
             self.__copy_to_destination(source, destination)
 
+    @property
+    def file_system(self):
+        '''
+        :rtype: FileSystem
+        '''
+
+        return self._file_system
+
+    @property
+    def name(self):
+        '''
+        :rtype: str
+        '''
+        return self._name
+
+    @property
+    def server_path(self):
+        '''
+        :rtype string
+        '''
+        return os.path.join(self._file_system.servers,self._name)
+
     @staticmethod
     def __check_destination(download, new_path):
         destination = path.join(new_path, download.file)

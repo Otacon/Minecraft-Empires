@@ -11,9 +11,9 @@ class TestInitPlayer(TestCase):
         self._player = Player()
 
     def test_position(self):
-        self.assertEquals(self._player.position.x, 0)
-        self.assertEquals(self._player.position.y, 0)
-        self.assertEquals(self._player.position.z, 0)
+        self.assertEqual(self._player.position.x, 0)
+        self.assertEqual(self._player.position.y, 0)
+        self.assertEqual(self._player.position.z, 0)
 
     def test_name(self):
         self.assertIsNone(self._player.name)
@@ -24,9 +24,9 @@ class TestCostructorNamePlayer(TestCase):
         self._player = Player("dummy")
 
     def test_position(self):
-        self.assertEquals(self._player.position.x, 0)
-        self.assertEquals(self._player.position.y, 0)
-        self.assertEquals(self._player.position.z, 0)
+        self.assertEqual(self._player.position.x, 0)
+        self.assertEqual(self._player.position.y, 0)
+        self.assertEqual(self._player.position.z, 0)
 
     def test_name(self):
         self.assertEquals(self._player.name,"dummy")
@@ -40,9 +40,9 @@ class TestCostructorPositionPlayer(TestCase):
         self._player = Player(position=Position(self._x, self._y, self._z))
 
     def test_position(self):
-        self.assertEquals(self._player.position.x, self._x)
-        self.assertEquals(self._player.position.y, self._y)
-        self.assertEquals(self._player.position.z, self._z)
+        self.assertEqual(self._player.position.x, self._x)
+        self.assertEqual(self._player.position.y, self._y)
+        self.assertEqual(self._player.position.z, self._z)
 
     def test_name(self):
         self.assertIsNone(self._player.name)
